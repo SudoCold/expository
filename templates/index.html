@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Expository Papers{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="kicker">Student research archive</p>
+  <h1>Expository Papers</h1>
+  <p class="lede">
+    Original writings by of the Department of Electronics Engineering at FEU
+    Institute of Technology. The collection gathers short theorems, puzzles,
+    thought experiments, and longer monographs
+  </p>
+  <dl class="stats">
+    <div>
+      <dt>Author</dt>
+      <dd>{{ author }}</dd>
+    </div>
+    <div>
+      <dt>Works</dt>
+      <dd>{{ paper_count }} papers</dd>
+    </div>
+    <div>
+      <dt>Department</dt>
+      <dd>Electronics Engineering</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="toolbar">
+  <label class="search-wrap">
+    <span class="sr-only">Search papers</span>
+    <input id="search" type="search" placeholder="Search titles and summaries" />
+  </label>
+  <div class="filters" id="filters">
+    <button class="chip is-active" data-category="all" type="button">All</button>
+    {% for category in categories %}
+    <button class="chip" data-category="{{ category }}" type="button">{{ category }}</button>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="grid" id="paper-grid">
+  {% for paper in papers %}
+  <article class="card" data-category="{{ paper.category }}" data-text="{{ (paper.title ~ ' ' ~ paper.summary ~ ' ' ~ paper.category)|lower }}">
+    <p class="meta">
+      <span>{{ paper.category }}</span>
+      {% if paper.pages %}
+      <span>{{ paper.pages }} {{ 'page' if paper.pages == 1 else 'pages' }}</span>
+      {% endif %}
+    </p>
+    <h2><a href="{{ url_for('paper_detail', slug=paper.slug) }}">{{ paper.title }}</a></h2>
+    <p>{{ paper.summary }}</p>
+    <p class="byline">{{ author }}</p>
+    <div class="actions">
+      <a class="btn" href="{{ url_for('paper_detail', slug=paper.slug) }}">Read</a>
+      <a class="btn btn-ghost" href="{{ url_for('download_paper', slug=paper.slug) }}">Download PDF</a>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+<p class="empty" id="empty"{% if papers %} hidden{% endif %}>
+  {% if papers %}No papers match that search.{% else %}No papers are listed yet.{% endif %}
+</p>
+
+<script>
+  const search = document.getElementById("search");
+  const chips = document.querySelectorAll(".chip");
+  const cards = document.querySelectorAll(".card");
+  const empty = document.getElementById("empty");
+  let category = "all";
+
+  function apply() {
+    const q = search.value.trim().toLowerCase();
+    let shown = 0;
+    cards.forEach((card) => {
+      const catOk = category === "all" || card.dataset.category === category;
+      const textOk = !q || card.dataset.text.includes(q);
+      const on = catOk && textOk;
+      card.hidden = !on;
+      if (on) shown += 1;
+    });
+    empty.hidden = shown !== 0;
+  }
+
+  search.addEventListener("input", apply);
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      chips.forEach((c) => c.classList.remove("is-active"));
+      chip.classList.add("is-active");
+      category = chip.dataset.category;
+      apply();
+    });
+  });
+</script>
+{% endblock %}

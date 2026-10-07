@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ paper.title }}{% endblock %}
+{% block content %}
+<article class="paper-page">
+  <p class="kicker">{{ paper.category }}{% if paper.pages %} · {{ paper.pages }} {{ 'page' if paper.pages == 1 else 'pages' }}{% endif %}</p>
+  <h1>{{ paper.title }}</h1>
+  <p class="byline large">{{ author }} · {{ department }}</p>
+  <p class="lede">{{ paper.summary }}</p>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('download_paper', slug=paper.slug) }}">Download PDF</a>
+    <a class="btn btn-ghost" href="{{ url_for('home') }}">Back to list</a>
+  </div>
+
+  <div class="viewer">
+    <object
+      title="{{ paper.title }} PDF"
+      data="{{ url_for('static', filename='papers/' + paper.filename) }}"
+      type="application/pdf"
+    >
+      <p>
+        PDF preview is not available in this browser.
+        <a href="{{ url_for('download_paper', slug=paper.slug) }}">Download the file</a>
+        instead.
+      </p>
+    </object>
+  </div>
+</article>
+{% endblock %}

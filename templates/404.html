@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Not found{% endblock %}
+{% block content %}
+<article class="about">
+  <p class="kicker">404</p>
+  <h1>This paper is not in the archive.</h1>
+  <p class="lede">The link may be misspelled, or the file was not included in this deployment.</p>
+  <a class="btn" href="{{ url_for('home') }}">Return to papers</a>
+</article>
+{% endblock %}

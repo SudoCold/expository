@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+<article class="about">
+  <p class="kicker">Author</p>
+  <h1>{{ author }}</h1>
+  <p class="lede">
+    {{ department }}, {{ institution }}. This site is a public shelf for
+    original expository papers: short theorems, puzzles, computing notes, and
+    longer collections written to explain an idea in the author's own language.
+  </p>
+  <div class="about-grid">
+    <section>
+      <h2>What this archive is</h2>
+      <p>
+        Each paper is a standalone PDF. Some are one-page sequences. Others are
+        book-length notebooks. They are listed together so a reader can move
+        from a cube puzzle to knot diagrams, particle thought experiments, or
+        electronics topics without hunting through separate files.
+      </p>
+    </section>
+    <section>
+      <h2>How to read</h2>
+      <p>
+        Open any title to preview the PDF in the browser, or download the file.
+        Use the category chips on the papers page to filter by mathematics,
+        geometry, combinatorics, physics, electronics and computing, philosophy,
+        or collected volumes.
+      </p>
+    </section>
+  </div>
+</article>
+{% endblock %}
